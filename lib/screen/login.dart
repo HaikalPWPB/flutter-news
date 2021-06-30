@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
         style: TextStyle(fontSize: 20, color: Colors.white),
       ),
       onTap: () {
-        Navigator.popAndPushNamed(context, '/');
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
       },
       )
     );
