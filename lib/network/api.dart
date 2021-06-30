@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Network{
-  final String _url = 'http://localhost:8000/api/v1';
+  final String _url = 'http://192.168.100.165:8000/api';
 
   var token;
   
@@ -27,7 +27,7 @@ class Network{
     await _getToken();
     return await http.get(
       Uri.parse(fullUrl),
-      headers: _setHeaders()
+      // headers: _setHeaders()
     );
   }
 
