@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:news/model/News.dart';
 import 'package:news/network/api.dart';
-import 'package:news/network/NewsService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:news/screen/news.dart';
+import 'package:news/screen/search.dart';
 
 Future _getNews() async {
   var response = await http.get(Uri.parse('http://192.168.100.165:8000/api/v1/news'));
@@ -92,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text('Logout'),
               onPressed: () {
                 Network().logout();
+                // Navigator.push(context, route)
               },
             )
           ],
@@ -136,6 +137,18 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.search),
+        onPressed: () {
+          Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: (context) => SearchScreen()
+            )
+          );
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
