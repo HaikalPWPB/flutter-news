@@ -70,7 +70,7 @@ class LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   InkWell(
-                    child: Text('Already have an account?', 
+                    child: Text('Not have an account? Create here!', 
                       style: TextStyle(color: Colors.cyan),
                     ),
                     onTap: () {
