@@ -7,9 +7,17 @@ import 'package:news/network/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:news/screen/news.dart';
 import 'package:news/screen/search.dart';
+import 'package:news/main.dart';
 
 Future _getNews() async {
-  var response = await http.get(Uri.parse('http://192.168.11.40:8000/api/v1/news'));
+  SharedPreferences localStorage = await SharedPreferences.getInstance();
+  var token = jsonDecode(localStorage.getString('token'))['token'];
+  var response = await http.get(
+    Uri.parse('http://192.168.11.40:8000/api/v1/news'),
+    headers: {
+      'Authorization': 'Bearer $token'
+    }
+  );
   var jsonData = jsonDecode(response.body);
   List<News> news = [];
 
@@ -54,17 +62,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, i) {
                   return Card(
                     margin: EdgeInsets.only(top: 5.0),
-                    child: ListTile(
-                      title: Text(snapshot.data[i].title),
-                      subtitle: Text(snapshot.data[i].createdAt),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => NewsScreen(
-                            snapshot.data[i].title, snapshot.data[i].createdAt, snapshot.data[i].content
-                          ))
-                        );
-                      },
+                    child: Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: ListTile(
+                        title: Text(snapshot.data[i].title),
+                        subtitle: Text(snapshot.data[i].createdAt),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => NewsScreen(
+                              snapshot.data[i].title, snapshot.data[i].createdAt, snapshot.data[i].content
+                            ))
+                          );
+                        },
+                      ),
                     )
                   );
                 },
@@ -80,33 +91,42 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.all(10.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(2.0),
-            border: Border.all(color: Colors.grey)
+            border: Border.all(color: Colors.grey),
+            color: Colors.white,
           ),
           child: Column(
             children: [
-              Icon(Icons.image),
-              Text(
-                'Haikal Putra Gustiansyah'
+              Card(
+                child: FutureBuilder(
+                  future: _getUser(),
+                  builder: (context, snapshot) {
+                    if(snapshot.data == null) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }else {
+                      return Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text('Name: ${snapshot.data['name']}'),
+                          Text('Email: ${snapshot.data['email']}'),
+                        ],
+                      );
+                    }
+                  },
+                ),
               ),
-              // Card(
-              //   child: FutureBuilder(
-              //     future: _getUser(),
-              //     builder: (context, snapshot) {
-              //       if(snapshot.data == null) {
-              //         return Center(
-              //           child: CircularProgressIndicator(),
-              //         );
-              //       }else {
-              //         return Text(snapshot.data.email);
-              //       }
-              //     },
-              //   ),
-              // ),
               ElevatedButton(
                 child: Text('Logout'),
                 onPressed: () {
                   Network().logout();
                   // Navigator.push(context, route)
+                  navigatorKey.currentState.pushReplacementNamed('/login');
                 },
               )
             ],

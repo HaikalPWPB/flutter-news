@@ -1,10 +1,12 @@
 import 'dart:convert';
-import 'dart:html';
+// import 'dart:html';
+import 'package:flappy_search_bar/scaled_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:news/model/News.dart';
 import 'package:http/http.dart' as http;
 import 'package:news/screen/news.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -17,13 +19,25 @@ class SearchScreenState extends State<SearchScreen> {
 
   Future<List<News>> _getNews(String keyword) async {
     // Post text to laravel api
+    print(keyword);
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var token = jsonDecode(localStorage.getString('token'))['token'];
     var response = await http.post(
-          Uri.parse('http://192.168.11.40:8000/api/v1/news/search'),
-          body: jsonEncode({
+        Uri.parse('http://192.168.11.40:8000/api/v1/news/search'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          },
+          body: jsonEncode(<String, String>{
             'keyword': keyword
-          })
+          }),
         );
+        
+    if(response.statusCode == 200) {
+      print('Hello world');
+    }
     var jsonData = jsonDecode(response.body);
+    print(jsonData.length);
     List<News> news = [];
 
     for(var a in jsonData) {
@@ -61,7 +75,10 @@ class SearchScreenState extends State<SearchScreen> {
                   },
                 ),
               );
-            }
+            },
+            onCancelled: () {
+              print('Cancelled');
+            },
           ),
         ),
       ),

@@ -74,7 +74,7 @@ class LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(color: Colors.cyan),
                     ),
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => RegisterScreen())
                       );

@@ -27,7 +27,7 @@ class Network{
     await _getToken();
     return await http.get(
       Uri.parse(fullUrl),
-      // headers: _setHeaders()
+      headers: _setHeaders()
     );
   }
 
