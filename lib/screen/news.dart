@@ -14,17 +14,25 @@ class NewsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        backgroundColor: Colors.cyan,
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.all(50.0),
         child: Column(
           children: [
             Text(
               title,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
             ),
+            SizedBox(
+              height: 10.0,
+            ),
             Text(
               createdAt,
               style: TextStyle(fontFamily: 'arial'),
+            ),
+            SizedBox(
+              height: 10.0,
             ),
             Html(data: content),
           ],

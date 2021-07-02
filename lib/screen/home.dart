@@ -9,7 +9,7 @@ import 'package:news/screen/news.dart';
 import 'package:news/screen/search.dart';
 
 Future _getNews() async {
-  var response = await http.get(Uri.parse('http://192.168.100.165:8000/api/v1/news'));
+  var response = await http.get(Uri.parse('http://192.168.11.40:8000/api/v1/news'));
   var jsonData = jsonDecode(response.body);
   List<News> news = [];
 
@@ -40,19 +40,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _children = [
       Container(
-        child: Card(
-          child: FutureBuilder(
-            future: _getNews(),
-            builder: (context, snapshot) {
-              if(snapshot.data == null) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }else {
-                return ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, i) {
-                    return ListTile(
+        margin: EdgeInsets.all(10),
+        child: FutureBuilder(
+          future: _getNews(),
+          builder: (context, snapshot) {
+            if(snapshot.data == null) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }else {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, i) {
+                  return Card(
+                    margin: EdgeInsets.only(top: 5.0),
+                    child: ListTile(
                       title: Text(snapshot.data[i].title),
                       subtitle: Text(snapshot.data[i].createdAt),
                       onTap: () {
@@ -63,41 +65,54 @@ class _HomeScreenState extends State<HomeScreen> {
                           ))
                         );
                       },
-                    );
-                  },
-                );
-              }
-            },
+                    )
+                  );
+                },
+              );
+            }
+          },
+        ),
+      ),
+      Center(
+        child: Container(
+          height: 250.0,
+          width: 250.0,
+          padding: EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(2.0),
+            border: Border.all(color: Colors.grey)
           ),
-        )
-      ),
-    Container(
-        child: Column(
-          children: [
-            // Card(
-            //   child: FutureBuilder(
-            //     future: _getUser(),
-            //     builder: (context, snapshot) {
-            //       if(snapshot.data == null) {
-            //         return Center(
-            //           child: CircularProgressIndicator(),
-            //         );
-            //       }else {
-            //         return Text(snapshot.data.email);
-            //       }
-            //     },
-            //   ),
-            // ),
-            ElevatedButton(
-              child: Text('Logout'),
-              onPressed: () {
-                Network().logout();
-                // Navigator.push(context, route)
-              },
-            )
-          ],
-        )
-      ),
+          child: Column(
+            children: [
+              Icon(Icons.image),
+              Text(
+                'Haikal Putra Gustiansyah'
+              ),
+              // Card(
+              //   child: FutureBuilder(
+              //     future: _getUser(),
+              //     builder: (context, snapshot) {
+              //       if(snapshot.data == null) {
+              //         return Center(
+              //           child: CircularProgressIndicator(),
+              //         );
+              //       }else {
+              //         return Text(snapshot.data.email);
+              //       }
+              //     },
+              //   ),
+              // ),
+              ElevatedButton(
+                child: Text('Logout'),
+                onPressed: () {
+                  Network().logout();
+                  // Navigator.push(context, route)
+                },
+              )
+            ],
+          )
+        ),
+      )
   ];
 
   @override
@@ -119,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('News Flutter'),
-        backgroundColor: Color(0xffe46b10),
+        backgroundColor: Colors.cyan,
       ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -129,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.book),
-            label: 'Text',
+            label: 'Read News',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.verified_user),
