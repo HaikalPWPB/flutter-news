@@ -23,7 +23,7 @@ class SearchScreenState extends State<SearchScreen> {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var token = jsonDecode(localStorage.getString('token'))['token'];
     var response = await http.post(
-        Uri.parse('http://192.168.11.40:8000/api/v1/news/search'),
+        Uri.parse('https://haikal.cyberwarrior.co.id/api/v1/news/search'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token'

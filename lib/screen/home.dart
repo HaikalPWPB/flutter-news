@@ -13,7 +13,7 @@ Future _getNews() async {
   SharedPreferences localStorage = await SharedPreferences.getInstance();
   var token = jsonDecode(localStorage.getString('token'))['token'];
   var response = await http.get(
-    Uri.parse('http://192.168.11.40:8000/api/v1/news'),
+    Uri.parse('https://haikal.cyberwarrior.co.id/api/v1/news'),
     headers: {
       'Authorization': 'Bearer $token'
     }
