@@ -36,7 +36,10 @@ class NewsScreen extends StatelessWidget {
             ),
             Html(
               data: content,
-              //onLinkTap here 
+              //onLinkTap here
+              // onLinkTap: (String url, RenderContext context, Map<String, String> attributes, dom.Element element) {
+              //   //open URL in webview, or launch URL in browser, or any other logic here
+              // } 
             ),
           ],
         ),

@@ -32,6 +32,14 @@ class RegisterScreenState extends State<RegisterScreen> {
   }
 
   @override
+  void dispose() {
+    name.dispose();
+    email.dispose();
+    password.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(

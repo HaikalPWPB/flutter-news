@@ -8,6 +8,7 @@ import 'package:news/screen/news.dart';
 import 'package:news/screen/search.dart';
 import 'package:news/main.dart';
 import 'package:news/helper/date.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 
 Future _getNews() async {
   SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -42,9 +43,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  String _message = '';
   int _currentIndex = 0;
   var user;
   // Date date = new Date();
+
+  // _registerOnFirebase() {
+  //   _firebaseMessaging.subscribeToTopic('all');
+  //   _firebaseMessaging.getToken().then((token) => print(token));
+  // }
 
   final List<Widget> _children = [
     Container(
@@ -156,16 +164,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    // _registerOnFirebase();
+    // getMessage();
     setState(() {
       user = _getUser();
     });
     super.initState();
   }
 
+  // void getMessage() {
+  //   _firebaseMessaging.configure(
+  //     onMessage: ()
+  //   )
+  // }
+
   void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
