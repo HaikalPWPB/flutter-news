@@ -28,7 +28,7 @@ class NewsScreen extends StatelessWidget {
               height: 10.0,
             ),
             Text(
-              createdAt,
+              'Di Upload Pada: $createdAt',
               style: TextStyle(fontFamily: 'arial'),
             ),
             SizedBox(

@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:news/screen/news.dart';
 import 'package:news/screen/search.dart';
 import 'package:news/main.dart';
+import 'package:news/helper/date.dart';
 
 Future _getNews() async {
   SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -43,6 +44,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   var user;
+  // Date date = new Date();
 
   final List<Widget> _children = [
     Container(
@@ -64,14 +66,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.all(5.0),
                     child: ListTile(
                       title: Text(snapshot.data[i].title),
-                      subtitle: Text(snapshot.data[i].createdAt),
+                      subtitle: Text('Di upload pada: ${Date.formatDate(snapshot.data[i].createdAt)}'),
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => NewsScreen(
                               snapshot.data[i].title,
-                              snapshot.data[i].createdAt,
+                              Date.formatDate(snapshot.data[i].createdAt),
                               snapshot.data[i].content
                             )
                           )
