@@ -4,6 +4,7 @@ import 'package:news/network/api.dart';
 import 'package:news/screen/home.dart';
 import 'package:news/screen/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:news/helper/validator.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -15,6 +16,8 @@ class RegisterScreenState extends State<RegisterScreen> {
   final name = TextEditingController();
   final email = TextEditingController();
   final password = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
 
   void _showAlert(msg) {
     showDialog(
@@ -35,87 +38,97 @@ class RegisterScreenState extends State<RegisterScreen> {
         padding: EdgeInsets.all(8.0),
         margin: EdgeInsets.only(top: 100.0),
         child: Center(
-          child: Column(
-            children: [
-              Center(
-                child: Text(
-                    'Register',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.cyan),
-                  ),
-              ),
-              SizedBox(
-                height: 48,
-              ),
-              TextField(
-                controller: name,
-                obscureText: false,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Name',
-                ),
-              ),
-              SizedBox(
-                height: 24,
-              ),
-              TextField(
-                controller: email,
-                obscureText: false,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Email',
-                ),
-              ),
-              SizedBox(
-                height: 24,
-              ),
-              TextField(
-                controller: password,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Password',
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    child: Text('Already have an account?', 
-                      style: TextStyle(color: Colors.cyan),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Center(
+                  child: Text(
+                      'Register',
+                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.cyan),
                     ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginScreen())
-                      );
+                ),
+                SizedBox(
+                  height: 48,
+                ),
+                TextFormField(
+                  controller: name,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Name',
+                  ),
+                  validator: validateName
+                ),
+                SizedBox(
+                  height: 24,
+                ),
+                TextFormField(
+                  controller: email,
+                  obscureText: false,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Email',
+                  ),
+                  validator: validateEmail
+                ),
+                SizedBox(
+                  height: 24,
+                ),
+                TextFormField(
+                  controller: password,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Password',
+                  ),
+                  validator: validatePassword
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      child: Text('Already have an account?', 
+                        style: TextStyle(color: Colors.cyan),
+                      ),
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginScreen())
+                        );
+                      },
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 24,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50.0,
+                  child: RaisedButton(
+                    child: Text(
+                      _isLoading ? '...Loading' : 'Register'
+                    ),
+                    color: Colors.cyan,
+                    onPressed: () {
+                      if(_formKey.currentState.validate()) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registering...')));
+                        _register();
+                      }
                     },
                   )
-                ],
-              ),
-              SizedBox(
-                height: 24,
-              ),
-              SizedBox(
-                width: double.infinity,
-                height: 50.0,
-                child: RaisedButton(
-                  child: Text(
-                    _isLoading ? '...Loading' : 'Register'
-                  ),
-                  color: Colors.cyan,
-                  onPressed: () {
-                    _login();
-                  },
                 )
-              )
-            ],
-          ),
+              ],
+            ),
+          )
         )
       )
     );
   }
   
-  void _login () async {
+  void _register () async {
     setState(() {
       _isLoading = true;
     });

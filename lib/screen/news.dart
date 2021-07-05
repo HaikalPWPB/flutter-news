@@ -34,7 +34,10 @@ class NewsScreen extends StatelessWidget {
             SizedBox(
               height: 10.0,
             ),
-            Html(data: content),
+            Html(
+              data: content,
+              //onLinkTap here 
+            ),
           ],
         ),
       )
