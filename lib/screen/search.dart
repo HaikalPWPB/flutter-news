@@ -1,6 +1,5 @@
 import 'dart:convert';
 // import 'dart:html';
-import 'package:flappy_search_bar/scaled_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:news/model/News.dart';

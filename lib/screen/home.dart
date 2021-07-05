@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:news/model/News.dart';
 import 'package:news/network/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,9 +11,10 @@ import 'package:news/main.dart';
 Future _getNews() async {
   SharedPreferences localStorage = await SharedPreferences.getInstance();
   var token = jsonDecode(localStorage.getString('token'))['token'];
-  var response = await http.get(
-      Uri.parse('https://haikal.cyberwarrior.co.id/api/v1/news'),
-      headers: {'Authorization': 'Bearer $token'});
+  // var response = await http.get(
+  //     Uri.parse('https://haikal.cyberwarrior.co.id/api/v1/news'),
+  //     headers: {'Authorization': 'Bearer $token'});
+  var response = await Network().getData('/news');
   var jsonData = jsonDecode(response.body);
   List<News> news = [];
 
