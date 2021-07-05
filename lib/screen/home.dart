@@ -13,16 +13,14 @@ Future _getNews() async {
   SharedPreferences localStorage = await SharedPreferences.getInstance();
   var token = jsonDecode(localStorage.getString('token'))['token'];
   var response = await http.get(
-    Uri.parse('https://haikal.cyberwarrior.co.id/api/v1/news'),
-    headers: {
-      'Authorization': 'Bearer $token'
-    }
-  );
+      Uri.parse('https://haikal.cyberwarrior.co.id/api/v1/news'),
+      headers: {'Authorization': 'Bearer $token'});
   var jsonData = jsonDecode(response.body);
   List<News> news = [];
 
-  for(var a in jsonData) {
-    News post = News(a['title'], a['content'], a['created_at'], a['updated_at']);
+  for (var a in jsonData) {
+    News post =
+        News(a['title'], a['content'], a['created_at'], a['updated_at']);
     news.add(post);
   }
   print(news.length);
@@ -47,92 +45,111 @@ class _HomeScreenState extends State<HomeScreen> {
   var user;
 
   final List<Widget> _children = [
-      Container(
-        margin: EdgeInsets.all(10),
-        child: FutureBuilder(
-          future: _getNews(),
-          builder: (context, snapshot) {
-            if(snapshot.data == null) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }else {
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, i) {
-                  return Card(
-                    margin: EdgeInsets.only(top: 5.0),
-                    child: Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: ListTile(
-                        title: Text(snapshot.data[i].title),
-                        subtitle: Text(snapshot.data[i].createdAt),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => NewsScreen(
-                              snapshot.data[i].title, snapshot.data[i].createdAt, snapshot.data[i].content
-                            ))
-                          );
-                        },
-                      ),
-                    )
-                  );
-                },
-              );
-            }
-          },
-        ),
+    Container(
+      margin: EdgeInsets.all(10),
+      child: FutureBuilder(
+        future: _getNews(),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, i) {
+                return Card(
+                  margin: EdgeInsets.only(top: 5.0),
+                  child: Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: ListTile(
+                      title: Text(snapshot.data[i].title),
+                      subtitle: Text(snapshot.data[i].createdAt),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NewsScreen(
+                              snapshot.data[i].title,
+                              snapshot.data[i].createdAt,
+                              snapshot.data[i].content
+                            )
+                          )
+                        );
+                      },
+                    ),
+                  )
+                );
+              },
+            );
+          }
+        },
       ),
-      Center(
-        child: Container(
-          height: 250.0,
-          width: 250.0,
-          padding: EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(2.0),
-            border: Border.all(color: Colors.grey),
-            color: Colors.white,
-          ),
-          child: Column(
-            children: [
-              Card(
-                child: FutureBuilder(
-                  future: _getUser(),
-                  builder: (context, snapshot) {
-                    if(snapshot.data == null) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }else {
-                      return Column(
-                        children: [
-                          CircleAvatar(
-                            radius: 50,
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text('Name: ${snapshot.data['name']}'),
-                          Text('Email: ${snapshot.data['email']}'),
-                        ],
-                      );
-                    }
-                  },
-                ),
-              ),
-              ElevatedButton(
-                child: Text('Logout'),
-                onPressed: () {
-                  Network().logout();
-                  // Navigator.push(context, route)
-                  navigatorKey.currentState.pushReplacementNamed('/login');
-                },
-              )
-            ],
-          )
+    ),
+    Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(24.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(2.0),
+        border: Border.all(color: Colors.grey),
+        color: Colors.white,
+      ),
+      child: Card(
+        child: Column(
+          children: [
+            FutureBuilder(
+              future: _getUser(),
+              builder: (context, snapshot) {
+                if (snapshot.data == null) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 24,
+                      ),
+                      CircleAvatar(
+                        radius: 50,
+                        child: Text(
+                          snapshot.data['name'],
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontFamily: 'arial'),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      Text(
+                        snapshot.data['name'],
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 35),
+                      ),
+                      Text(
+                        snapshot.data['email'],
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontFamily: 'Georgia',
+                            fontSize: 15),
+                      )
+                    ],
+                  );
+                }
+              },
+            ),
+            ElevatedButton(
+              child: Text('Logout'),
+              onPressed: () {
+                Network().logout();
+                // Navigator.push(context, route)
+                navigatorKey.currentState.pushReplacementNamed('/login');
+              },
+            )
+          ],
         ),
       )
+    )
   ];
 
   @override
@@ -167,20 +184,14 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Read News',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.verified_user),
-            label: 'User Profile'
-          )
+              icon: Icon(Icons.verified_user), label: 'User Profile')
         ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
         onPressed: () {
           Navigator.push(
-            context, 
-            MaterialPageRoute(
-              builder: (context) => SearchScreen()
-            )
-          );
+              context, MaterialPageRoute(builder: (context) => SearchScreen()));
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
