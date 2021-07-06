@@ -32,6 +32,16 @@ class Network{
     );
   }
 
+  postData(data, apiUrl) async {
+    var fullUrl = _url + apiUrl;
+    await _getToken();
+    return await http.post(
+      Uri.parse(fullUrl),
+      headers: _setHeaders(),
+      body: jsonEncode(data)
+    );
+  }
+
   logout() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     await localStorage.clear();
