@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsScreen extends StatelessWidget {
   final String title;
@@ -37,9 +39,13 @@ class NewsScreen extends StatelessWidget {
             Html(
               data: content,
               //onLinkTap here
-              // onLinkTap: (String url, RenderContext context, Map<String, String> attributes, dom.Element element) {
-              //   //open URL in webview, or launch URL in browser, or any other logic here
-              // } 
+              onLinkTap: (String url, RenderContext context, Map<String, String> attributes, dom.Element element) {
+                //open URL in webview, or launch URL in browser, or any other logic here
+                print(url);
+                print(element);
+                print(attributes);
+                launch(url);
+              } 
             ),
           ],
         ),

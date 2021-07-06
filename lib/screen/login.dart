@@ -44,95 +44,97 @@ class LoginScreenState extends State<LoginScreen> {
     return Scaffold(
         body: Container(
         padding: EdgeInsets.all(8.0),
-        margin: EdgeInsets.only(top: 100.0),
         child: Center(
           child: Form(
             key: _formKey,
-            child: Column(
-              children: [
-                Center(
-                  child: Text(
-                      'Login',
-                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.cyan),
-                    ),
-                ),
-                SizedBox(
-                  height: 48,
-                ),
-                TextFormField(
-                  controller: email,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Email',
-                  ),
-                  validator: validateEmail
-                ),
-                // TextField(
-                //   controller: email,
-                //   obscureText: false,
-                //   decoration: InputDecoration(
-                //     border: OutlineInputBorder(),
-                //     labelText: 'Email',
-                //   ),
-                // ),
-                SizedBox(
-                  height: 24,
-                ),
-                TextFormField(
-                  controller: password,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-                  ),
-                  validator: validatePassword
-                ),
-                // TextField(
-                //   controller: password,
-                //   obscureText: true,
-                //   decoration: InputDecoration(
-                //     border: OutlineInputBorder(),
-                //     labelText: 'Password',
-                //   ),
-                // ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    InkWell(
-                      child: Text('Not have an account? Create here!', 
-                        style: TextStyle(color: Colors.cyan),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Center(
+                    child: Text(
+                        'Login',
+                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.cyan),
                       ),
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => RegisterScreen())
-                        );
+                  ),
+                  SizedBox(
+                    height: 48,
+                  ),
+                  TextFormField(
+                    controller: email,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Email',
+                    ),
+                    validator: validateEmail
+                  ),
+                  // TextField(
+                  //   controller: email,
+                  //   obscureText: false,
+                  //   decoration: InputDecoration(
+                  //     border: OutlineInputBorder(),
+                  //     labelText: 'Email',
+                  //   ),
+                  // ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  TextFormField(
+                    controller: password,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Password',
+                    ),
+                    validator: validatePassword
+                  ),
+                  // TextField(
+                  //   controller: password,
+                  //   obscureText: true,
+                  //   decoration: InputDecoration(
+                  //     border: OutlineInputBorder(),
+                  //     labelText: 'Password',
+                  //   ),
+                  // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        child: Text('Not have an account? Create here!', 
+                          style: TextStyle(color: Colors.cyan),
+                        ),
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => RegisterScreen())
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50.0,
+                    child: RaisedButton(
+                      child: Text(
+                        _isLoading ? 'Loading...' : 'Login',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color: Colors.cyan,
+                      onPressed: () {
+                        if(_formKey.currentState.validate()) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Logging in...')));
+                          _login();
+                        }
                       },
                     )
-                  ],
-                ),
-                SizedBox(
-                  height: 24,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50.0,
-                  child: RaisedButton(
-                    child: Text(
-                      _isLoading ? '...Loading' : 'Login'
-                    ),
-                    color: Colors.cyan,
-                    onPressed: () {
-                      if(_formKey.currentState.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Logging in...')));
-                        _login();
-                      }
-                    },
-                  )
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            )
           )
         )
       )

@@ -44,92 +44,94 @@ class RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
         body: Container(
         padding: EdgeInsets.all(8.0),
-        margin: EdgeInsets.only(top: 100.0),
         child: Center(
           child: Form(
             key: _formKey,
-            child: Column(
-              children: [
-                Center(
-                  child: Text(
-                      'Register',
-                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.cyan),
-                    ),
-                ),
-                SizedBox(
-                  height: 48,
-                ),
-                TextFormField(
-                  controller: name,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Name',
-                  ),
-                  validator: validateName
-                ),
-                SizedBox(
-                  height: 24,
-                ),
-                TextFormField(
-                  controller: email,
-                  obscureText: false,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Email',
-                  ),
-                  validator: validateEmail
-                ),
-                SizedBox(
-                  height: 24,
-                ),
-                TextFormField(
-                  controller: password,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-                  ),
-                  validator: validatePassword
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    InkWell(
-                      child: Text('Already have an account?', 
-                        style: TextStyle(color: Colors.cyan),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Center(
+                    child: Text(
+                        'Register',
+                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.cyan),
                       ),
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginScreen())
-                        );
+                  ),
+                  SizedBox(
+                    height: 48,
+                  ),
+                  TextFormField(
+                    controller: name,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Name',
+                    ),
+                    validator: validateName
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  TextFormField(
+                    controller: email,
+                    obscureText: false,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Email',
+                    ),
+                    validator: validateEmail
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  TextFormField(
+                    controller: password,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Password',
+                    ),
+                    validator: validatePassword
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        child: Text('Already have an account?', 
+                          style: TextStyle(color: Colors.cyan),
+                        ),
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginScreen())
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50.0,
+                    child: RaisedButton(
+                      child: Text(
+                        _isLoading ? 'Loading...' : 'Register',
+                        style: TextStyle(color: Colors.white)
+                      ),
+                      color: Colors.cyan,
+                      onPressed: () {
+                        if(_formKey.currentState.validate()) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registering...')));
+                          _register();
+                        }
                       },
                     )
-                  ],
-                ),
-                SizedBox(
-                  height: 24,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50.0,
-                  child: RaisedButton(
-                    child: Text(
-                      _isLoading ? '...Loading' : 'Register'
-                    ),
-                    color: Colors.cyan,
-                    onPressed: () {
-                      if(_formKey.currentState.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registering...')));
-                        _register();
-                      }
-                    },
                   )
-                )
-              ],
-            ),
+                ],
+              ),
+            )
           )
         )
       )
