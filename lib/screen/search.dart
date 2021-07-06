@@ -6,6 +6,7 @@ import 'package:news/model/News.dart';
 import 'package:http/http.dart' as http;
 import 'package:news/screen/news.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:news/helper/date.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class SearchScreenState extends State<SearchScreen> {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var token = jsonDecode(localStorage.getString('token'))['token'];
     var response = await http.post(
-        Uri.parse('http://192.168.100.165:8000/api/v1/news/search'),
+        Uri.parse('https://haikal.cyberwarrior.co.id/api/v1/news/search'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token'
@@ -65,11 +66,15 @@ class SearchScreenState extends State<SearchScreen> {
               return Container(
                 child: ListTile(
                   title: Text(news.title),
-                  subtitle: Text(news.createdAt),
+                  subtitle: Text(Date.formatDate(news.createdAt)),
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => NewsScreen(news.title, news.createdAt, news.content))
+                      MaterialPageRoute(builder: (context) => NewsScreen(
+                        news.title,
+                        Date.formatDate(news.createdAt),
+                        news.content
+                      ))
                     );
                   },
                 ),
