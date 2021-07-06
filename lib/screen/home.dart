@@ -8,7 +8,17 @@ import 'package:news/screen/news.dart';
 import 'package:news/screen/search.dart';
 import 'package:news/main.dart';
 import 'package:news/helper/date.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+
+final channel = const AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      'This channel is used for important notifications.', // description
+      importance: Importance.high,
+);
 
 Future _getNews() async {
   SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -43,16 +53,67 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   String _message = '';
   int _currentIndex = 0;
   var user;
-  // Date date = new Date();
+  Date date = new Date();
 
-  // _registerOnFirebase() {
-  //   _firebaseMessaging.subscribeToTopic('all');
-  //   _firebaseMessaging.getToken().then((token) => print(token));
-  // }
+  _registerOnFirebase() {
+    _firebaseMessaging.subscribeToTopic('all');
+    _firebaseMessaging.getToken().then((token) => print('haha: $token'));
+  }
+
+  @override
+  void initState() {
+    _registerOnFirebase();
+    getMessage();
+    setState(() {
+      user = _getUser();
+    });
+    super.initState();
+  }
+
+  void getMessage() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) { 
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+      FlutterLocalNotificationsPlugin  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+      if(notification != null && android != null) {
+        print(notification.title);
+        print(notification.body);
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channel.description,
+              icon: 'launch_background',
+            )
+          )
+        );
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) { 
+      print('OnMessageOpenedApp');
+    });
+  }
+
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   final List<Widget> _children = [
     Container(
@@ -162,32 +223,6 @@ class _HomeScreenState extends State<HomeScreen> {
     )
   ];
 
-  @override
-  void initState() {
-    // _registerOnFirebase();
-    // getMessage();
-    setState(() {
-      user = _getUser();
-    });
-    super.initState();
-  }
-
-  // void getMessage() {
-  //   _firebaseMessaging.configure(
-  //     onMessage: ()
-  //   )
-  // }
-
-  void onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
