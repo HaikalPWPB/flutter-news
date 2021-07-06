@@ -24,7 +24,7 @@ class SearchScreenState extends State<SearchScreen> {
             searchBarPadding: EdgeInsets.symmetric(horizontal: 10),
             headerPadding: EdgeInsets.symmetric(horizontal: 10),
             listPadding: EdgeInsets.symmetric(horizontal: 10),
-            placeHolder: Text('Search by title...'),
+            placeHolder: Text('Search by title... (min first 4 character)'),
             cancellationWidget: Icon(Icons.cancel),
             searchBarController: _searchBarController,
             onSearch: NewsService().searchNews,
