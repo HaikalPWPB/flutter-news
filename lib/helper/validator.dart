@@ -2,9 +2,6 @@
     if(value == null || value.isEmpty) {
       return 'Name field is required';
     }
-    if(value.length < 6) {
-      return 'Name field can\'t less than 6 character';
-    }
     else return null;
   }
   
